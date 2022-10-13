@@ -72,7 +72,6 @@ class Service:
 
     @classmethod
     async def create(cls, **service):
-        print(service)
         query = services.select().where(services.c.url == service['url'])
         service = await db.fetch_one(query)
         if service:

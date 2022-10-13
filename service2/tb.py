@@ -9,8 +9,10 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 TELEBOT_API_TOKEN = str(os.environ["TELEBOT_API_TOKEN"])
-print(TELEBOT_API_TOKEN)
 
+##########
+# Init bot
+##########
 bot = AsyncTeleBot(TELEBOT_API_TOKEN)
 
 async def telebot_init():
