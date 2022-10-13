@@ -1,7 +1,4 @@
 from sqlalchemy import Table, Column, ForeignKey, Integer, String, Boolean
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
 from db import db, metadata
 
 users = Table(
@@ -41,7 +38,9 @@ class User:
     async def get(cls, id):
         query = users.select().where(users.c.id == id)
         user = await db.fetch_one(query)
-        return user
+        if user:
+            return id
+        return None
 
     @classmethod
     async def create(cls, **user):
@@ -49,18 +48,44 @@ class User:
         uid = await db.execute(query)
         return uid
 
+    @classmethod
+    async def set_service(cls, user_id, service_id):
+        query = users.update().where(users.c.id == user_id).values(service_id=service_id)
+        await db.execute(query)
+
+    @classmethod
+    async def get_service(cls, uid):
+        query = user.select().where(users.c.id == uid)
+        user = await db.fetch_one(query)
+        if user:
+            return user.service_id
+        return None
+
 class Service:
     @classmethod
     async def get(cls, id):
         query = services.select().where(services.c.id == id)
         service = await db.fetch_one(query)
-        return service
+        if service:
+            return id
+        return None
 
     @classmethod
     async def create(cls, **service):
+        print(service)
+        query = services.select().where(services.c.url == service['url'])
+        service = await db.fetch_one(query)
+        if service:
+            return None
         query = services.insert().values(**service)
         sid = await db.execute(query)
         return sid
+
+    @classmethod
+    async def get_all(cls):
+        query = services.select()
+        services_list = await db.fetch_all(query)
+        return services_list
 
 class Transaction:
     @classmethod
@@ -80,3 +105,8 @@ class Transaction:
         query = transactions.select()
         transactions_list = await db.fetch_all(query)
         return transactions_list
+
+    @classmethod
+    async def update(cls, tid, **transaction):
+        query = transactions.update().where(transactions.c.id == tid).values(**transaction)
+        await db.execute(query)

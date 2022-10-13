@@ -2,13 +2,21 @@
 fastapi
 gunicorn
 uvicorn
+
 # use postres database backend
 fastapi-sqlalchemy
 pydantic
 alembic
 psycopg2
 python-dotenv
+
 # config async
 databases
 databases[postgresql]
 asyncpg
+
+# add AsyncTeleBot
+pyTelegramBotAPI
+
+# add async web client
+httpx
