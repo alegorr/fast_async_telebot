@@ -1,5 +1,5 @@
 from sqlalchemy import Table, Column, ForeignKey, Integer, String, Boolean
-from db import db, metadata
+from .db import db, metadata
 
 users = Table(
     'users',
@@ -71,12 +71,12 @@ class Service:
         return None
 
     @classmethod
-    async def create(cls, **service):
-        query = services.select().where(services.c.url == service['url'])
+    async def create(cls, service_name, service_url):
+        query = services.select().where(services.c.url == service_url)
         service = await db.fetch_one(query)
         if service:
             return None
-        query = services.insert().values(**service)
+        query = services.insert().values(name=service_name, url=service_url)
         sid = await db.execute(query)
         return sid
 

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from db import db
-from tb import telebot_init, telebot_stop
+from .db import db
+from .tb import telebot_init, telebot_stop
 
 app = FastAPI(title="Async FastAPI Telebot")
 

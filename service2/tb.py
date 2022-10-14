@@ -1,5 +1,5 @@
-from schema import ServiceSchema
-from models import User, Service, Transaction
+from .schema import ServiceSchema
+from .models import User, Service, Transaction
 from telebot.async_telebot import AsyncTeleBot
 from telebot.types import Update
 import os
@@ -32,11 +32,7 @@ async def telebot_init():
         TELEBOT_KNOWN_SERVICES = zip(os.environ['TELEBOT_KNOWN_SERVICES'].split(","), os.environ['TELEBOT_KNOWN_SERVICES_NAMES'].split(","))
         for service_url, service_name in TELEBOT_KNOWN_SERVICES:
             try:
-                service_data = {
-                    "name": service_name,
-                    "url": service_url
-                }
-                service_id = await Service.create(service_data)
+                service_id = await Service.create(service_name, service_url)
                 if service_id:
                     print("add service ", service_url)
                 else:
@@ -64,7 +60,7 @@ async def get_user(message):
                 "username": u.username,
                 "service_id": 0
             }
-            uid = await User.create(user_data)
+            uid = await User.create(**user_data)
     except Exception as err:
         print("get user error ", err)
     return uid
@@ -79,10 +75,11 @@ async def get_service(service_name):
 
 async def services_list():
     try:
-        services_lst = await Services.get_all()
+        services_lst = await Service.get_all()
         services = list()
         for s in services_lst:
             services.append(ServiceSchema(**s))
+        print(services)
         return services
     except Exception as err:
         print(err)

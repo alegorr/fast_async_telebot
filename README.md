@@ -2,6 +2,10 @@
 docker-compose build
 docker-compose up
 
+# If adress already in use
+sudo ss -lptn 'sport = :5432'
+sudo kill <pid>
+
 # Create migration and migrate db
 sudo docker-compose run web alembic revision --autogenerate -m "First migration"
 sudo docker-compose run web alembic upgrade head
