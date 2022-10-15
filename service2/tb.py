@@ -98,7 +98,7 @@ async def get_user(message):
 async def get_service(service_name):
     service = None
     try:
-        service = await Service.get_by_name(service_name)
+        service = await Service.get(service_name)
     except Exception as err:
         print("can not get service ", err)
     return service
@@ -146,6 +146,9 @@ async def make_transaction(message):
             print("Transaction: sending message...\n>>>")
             print(message.text)
             print(">>>")
+            data = {"sentences": message.text.split(",")}
+            print("processed: ", data)
+            print("service url: ", service.url)
             result = await client.post(service.url, data={"sentences": message.text.split(",")})
             if result.status_code == 200:
                 text = str(result.json())
