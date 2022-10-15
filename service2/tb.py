@@ -149,7 +149,8 @@ async def make_transaction(message):
             data = {"sentences": message.text.split(",")}
             print("processed: ", data)
             print("service url: ", service.url)
-            result = await client.post(service.url, data={"sentences": message.text.split(",")})
+            headers = {"Content-Type":"application/json"}
+            result = await client.post(service.url.strip(), data=data, headers=headers)
             if result.status_code == 200:
                 text = str(result.json())
                 print("Transaction: data received\n>>>")

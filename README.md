@@ -29,6 +29,8 @@ TELEBOT_KNOWN_SERVICES_NAMES=badlisted_words,spacy_nounphrases
 TELEBOT_KNOWN_SERVICES_URLS=http://dream.deeppavlov.ai:8018/badlisted_words,http://dream.deeppavlov.ai:8006/respond
 DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
 
-# Test srevices
+# Test DP services
+any fucks in this sentence, good one, fucked one
 `curl -X POST -H "Content-Type: application/json" -d '{"sentences": ["any fucks in this sentence", "good one", "fucked one"]}' http://dream.deeppavlov.ai:8018/badlisted_words`
+i like michal jordan, hey this is a white bear
 `curl -X POST -H "Content-Type: application/json" -d '{"sentences": ["i like michal jordan", "hey this is a white bear"]}' http://dream.deeppavlov.ai:8006/respond`
