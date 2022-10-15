@@ -38,15 +38,15 @@ async def telebot_init():
         print("remove old webhook... Done.")
     except:
         pass
-    try:
-       print("set Telebot webhook...")
-       await bot.set_webhook(url=TELEBOT_WEBHOOK_URL, certificate=open(TELEBOT_WEBHOOK_CERT, 'r'))
-       print("set Telebot webhook... Done.")
-       print("get webhook info...")
-       webhook_info = await bot.get_webhook_info()
-       print('webhook info ', webhook_info)
-    except Exception as err:
-       print("Can not set Telebot webhook: ", err)
+    # try:
+    #    print("set Telebot webhook...")
+    #    await bot.set_webhook(url=TELEBOT_WEBHOOK_URL, certificate=open(TELEBOT_WEBHOOK_CERT, 'r'))
+    #    print("set Telebot webhook... Done.")
+    #    print("get webhook info...")
+    #    webhook_info = await bot.get_webhook_info()
+    #    print('webhook info ', webhook_info)
+    # except Exception as err:
+    #    print("Can not set Telebot webhook: ", err)
     #
     print("Register services...")
     try:
@@ -64,6 +64,7 @@ async def telebot_init():
 
 async def telebot_stop():
     print("Stop bot messaging...")
+    await bot.remove_webhook()
     await bot.close_session()
     print("Bot stop messaging.")
 

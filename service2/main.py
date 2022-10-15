@@ -21,7 +21,7 @@ async def get_transactions():
     transactions = await transactions_list()
     return transactions
 
-@app.get("/all/")
+@app.get("/")
 async def get_all():
     services = await services_list()
     users = await users_list()
