@@ -23,7 +23,7 @@ BOT_SERVICE_MESSAGE = \
 You choose {}
 '''
 
-BOT_TRY_AGAIN_MESSAGE = \
+BOT_ERROR_MESSAGE = \
 '''
 Sorry. I get error %s
 '''

@@ -146,7 +146,7 @@ async def make_transaction(message):
             print("Transaction: sending message...\n>>>")
             print(message.text)
             print(">>>")
-            result = await client.post(service.address, data={"sentences": message.text.split(",")})
+            result = await client.post(service.url, data={"sentences": message.text.split(",")})
             if result.status_code == 200:
                 text = str(result.json())
                 print("Transaction: data received\n>>>")
@@ -158,7 +158,7 @@ async def make_transaction(message):
                 print("Transaction: send bot message...")
                 await bot.reply_to(message, text=text)
                 print("Transaction: send bot message... Ok!")
-                await Transaction.update(tid, {"complete": True})
+                await Transaction.update(tid, **{"complete": True})
                 print("Transaction: complete ", tid)
             else:
                 print("Transaction: data lost")
@@ -167,7 +167,7 @@ async def make_transaction(message):
                 print("Transaction: sending error bot message...")
                 await bot.reply_to(message, text=err_msg)
                 print("Transaction: sending error bot message... Ok!")
-                await Transaction.update(tid, {"error": str(result.status_code)})
+                await Transaction.update(tid, **{"error": str(result.status_code)})
                 print("Transaction: error {}".format(result.status_code), tid)
     except Exception as err:
         print("Transaction get error ", err)
