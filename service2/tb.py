@@ -3,12 +3,13 @@ from telebot.types import Update
 from .models import User, Service, Transaction
 from .messages import *
 import httpx
-from dotenv import load_dotenv
-import os
+import json
 
 ############
 # Setup vars
 ############
+from dotenv import load_dotenv
+import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 load_dotenv(os.path.join(BASE_DIR, ".env"))
 
@@ -53,7 +54,7 @@ async def telebot_init():
         for service_name, service_url in TELEBOT_KNOWN_SERVICES:
             try:
                 service_id = await Service.create(service_name, service_url)
-                print("service {} () registered".format(service_name, service_url))
+                print("service {} ({}) registered".format(service_name, service_url))
             except Exception as err:
                 print("registering service error ", err)
     except Exception as err:
@@ -150,14 +151,14 @@ async def make_transaction(message):
             print("processed: ", data)
             print("service url: ", service.url)
             headers = {"Content-Type":"application/json"}
-            result = await client.post(service.url.strip(), data=data, headers=headers)
+            result = await client.post(service.url.strip(), data=json.dumps(data), headers=headers)
             if result.status_code == 200:
                 text = str(result.json())
                 print("Transaction: data received\n>>>")
                 print(text)
                 print(">>>")
                 print("Transaction: update...")
-                await Transaction.update(tid, {"output": text})
+                await Transaction.update(tid, **{"output": text})
                 print("Transaction: update succeeded +", tid)
                 print("Transaction: send bot message...")
                 await bot.reply_to(message, text=text)
