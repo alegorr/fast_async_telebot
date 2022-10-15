@@ -23,8 +23,17 @@ async def get_transactions():
 async def get_all():
     services = await services_list()
     users = await users_list()
-    transactions = await transactions()
+    transactions = await transactions_list()
     return [services, users, transactions]
+
+##############
+# Webhook cast
+##############
+@app.post("/{}/".format(TELEBOT_API_TOKEN), status_code=200)
+async def telebot_pull_messages(request: Request):
+    print("Pull messages fired!")
+    #await pull_messages(request)
+    return "OK"
 
 ###############
 # Main function

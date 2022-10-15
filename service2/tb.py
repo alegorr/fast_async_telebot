@@ -16,6 +16,13 @@ TELEBOT_NAME = str(os.environ["TELEBOT_NAME"])
 TELEBOT_API_TOKEN = str(os.environ["TELEBOT_API_TOKEN"])
 TELEBOT_KNOWN_SERVICES = zip(os.environ['TELEBOT_KNOWN_SERVICES_NAMES'].split(","), os.environ['TELEBOT_KNOWN_SERVICES_URLS'].split(","))
 
+TELEBOT_WEBHOOK_HOST = str(os.environ["TELEBOT_WEBHOOK_HOST"])
+TELEBOT_WEBHOOK_PORT = str(os.environ["TELEBOT_WEBHOOK_PORT"])
+TELEBOT_WEBHOOK_URL = 'https://%s:%s/%s/' % (TELEBOT_WEBHOOK_HOST, TELEBOT_WEBHOOK_PORT, TELEBOT_API_TOKEN)
+
+TELEBOT_WEBHOOK_CERT = str(os.environ["TELEBOT_WEBHOOK_CERT"])
+TELEBOT_WEBHOOK_KEY = str(os.environ["TELEBOT_WEBHOOK_KEY"])
+
 ################
 # Init async bot
 ################
@@ -23,6 +30,24 @@ bot = AsyncTeleBot(TELEBOT_API_TOKEN)
 
 async def telebot_init():
     print("{} bot init...".format(TELEBOT_NAME))
+    # set webhook
+    print('Telebot webhook url: ', TELEBOT_WEBHOOK_URL)
+    try:
+        print("remove old webhook...")
+        await bot.remove_webhook()
+        print("remove old webhook... Done.")
+    except:
+        pass
+    try:
+       print("set Telebot webhook...")
+       await bot.set_webhook(url=TELEBOT_WEBHOOK_URL, certificate=open(TELEBOT_WEBHOOK_CERT, 'r'))
+       print("set Telebot webhook... Done.")
+       print("get webhook info...")
+       webhook_info = await bot.get_webhook_info()
+       print('webhook info ', webhook_info)
+    except Exception as err:
+       print("Can not set Telebot webhook: ", err)
+    #
     print("Register services...")
     try:
         for service_name, service_url in TELEBOT_KNOWN_SERVICES:
@@ -169,3 +194,20 @@ async def choose_spacy_service(message):
 @bot.message_handler(func=lambda message: message.text not in BOT_KNOWN_COMMANDS, content_types=['text'])
 async def process_message(message):
     await make_transaction(message)
+
+#######################
+# Process webhook calls
+#######################
+async def pull_messages(request):
+    try:
+        print("Pull messages start...")
+        request_body = await request.body()
+        print(request_body)
+        data = request_body.decode("utf-8")
+        updates = Update.de_json(data)
+        print(updates)
+        print("process updates...")
+        await bot.process_new_updates([updates])
+        print("updates processed.")
+    except Exception as err:
+        print("Can't process new updates ", err)
