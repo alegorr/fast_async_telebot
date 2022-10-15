@@ -38,9 +38,7 @@ class User:
     async def get(cls, id):
         query = users.select().where(users.c.id == id)
         user = await db.fetch_one(query)
-        if user:
-            return id
-        return None
+        return user
 
     @classmethod
     async def create(cls, **user):
@@ -54,10 +52,10 @@ class User:
         await db.execute(query)
 
     @classmethod
-    async def get_service(cls, uid):
-        query = users.select().where(users.c.id == uid)
-        user = await db.fetch_one(query)
-        return user.service_id
+    async def get_service(cls, service_id):
+        query = services.select().where(services.c.id == service_id)
+        service = await db.execute(query)
+        return service
 
     @classmethod
     async def get_all(cls):
@@ -67,24 +65,10 @@ class User:
 
 class Service:
     @classmethod
-    async def get(cls, id):
-        query = services.select().where(services.c.id == id)
-        service = await db.fetch_one(query)
-        if service:
-            return id
-        return None
-
-    @classmethod
-    async def get_address(cls, sid):
-        query = services.select().where(services.c.id == id)
-        service = await db.fetch_one(query)
-        return service.address
-
-    @classmethod
-    async def get_id_by_name(cls, service_name):
+    async def get(cls, service_name):
         query = services.select().where(services.c.name == service_name)
         service = await db.fetch_one(query)
-        return service.id
+        return service
 
     @classmethod
     async def create(cls, service_name, service_url):
@@ -97,16 +81,16 @@ class Service:
         return sid
 
     @classmethod
+    async def get_first_service(cls):
+        query = services.select()
+        service = await db.fetch_one(query)
+        return service
+
+    @classmethod
     async def get_all(cls):
         query = services.select()
         services_list = await db.fetch_all(query)
         return services_list
-
-    @classmethod
-    async def get_first_service_id(cls):
-        query = services.select()
-        service = await db.fetch_one(query)
-        return service.id
 
 class Transaction:
     @classmethod
@@ -122,12 +106,12 @@ class Transaction:
         return tid
 
     @classmethod
+    async def update(cls, tid, **transaction):
+        query = transactions.update().where(transactions.c.id == tid).values(**transaction)
+        await db.execute(query)
+
+    @classmethod
     async def get_all(cls):
         query = transactions.select()
         transactions_list = await db.fetch_all(query)
         return transactions_list
-
-    @classmethod
-    async def update(cls, tid, **transaction):
-        query = transactions.update().where(transactions.c.id == tid).values(**transaction)
-        await db.execute(query)

@@ -1,15 +1,9 @@
 from .app import app
-from fastapi import Request
-from .tb import pull_messages, TELEBOT_API_TOKEN
 from .api import services_list, users_list, transactions_list
 
-TELEBOT_API_ROUTE = "/{}/".format(TELEBOT_API_TOKEN)
-@app.post(TELEBOT_API_ROUTE, status_code=200)
-async def telebot_pull_messages(request: Request):
-    print("Pull messages fired!")
-    #await pull_messages(request)
-    return "OK"
-
+#############
+# API methods
+#############
 @app.get("/services/")
 async def get_services():
     services = await services_list()
@@ -24,6 +18,13 @@ async def get_users():
 async def get_transactions():
     transactions = await transactions_list()
     return transactions
+
+@app.get("/all/")
+async def get_all():
+    services = await services_list()
+    users = await users_list()
+    transactions = await transactions()
+    return [services, users, transactions]
 
 ###############
 # Main function

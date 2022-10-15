@@ -1,6 +1,6 @@
 # Build and run docker
 docker-compose build
-docker-compose up
+docker-compose up -d
 
 # If adress already in use
 sudo ss -lptn 'sport = :5432'

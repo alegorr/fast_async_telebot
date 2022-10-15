@@ -1,5 +1,4 @@
 version: "3"
-
 services:
   nginx-proxy:
     image: nginx
@@ -9,10 +8,10 @@ services:
       - "443:443"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./web:/etc/nginx/conf.d
-      - ./cert/ztest.online/cert1.pem:/root/ssl/cert.pem
-      - ./cert/ztest.online/privkey1.pem:/root/ssl/key.pem
-      - ./cert/dhparam.pem:/etc/nginx/dhparam/dhparam.pem
+      - ./deploy/ztest.online/nginx:/etc/nginx/conf.d
+      - ./deploy/ztest.online/cert/cert1.pem:/root/ssl/cert.pem
+      - ./deploy/ztest.online/cert/privkey1.pem:/root/ssl/key.pem
+      - ./deploy/ztest.online/cert/dhparam.pem:/etc/nginx/dhparam/dhparam.pem
   db:
     image: postgres:11
     ports:
@@ -24,11 +23,9 @@ services:
   web:
     env_file: [.env]
     build: .
-    command: bash -c "alembic upgrade head && gunicorn service2.main:app -k uvicorn.workers.UvicornWorker -w 2 -b 0.0.0.0:8000 --reload"
+    command: bash -c "alembic upgrade head && uvicorn service2.main:app --host 0.0.0.0 --port 8000 --reload --lifespan off
     volumes:
       - .:/code
-      - ./cert/ztest.online/cert1.pem:/root/ssl/cert.pem
-      - ./cert/ztest.online/privkey1.pem:/root/ssl/key.pem
     ports:
       - "8000:8000"
     depends_on:

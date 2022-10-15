@@ -6,11 +6,6 @@ async def services_list():
         services_lst = await Service.get_all()
         services = list()
         for s in services_lst:
-            print(s)
-            print(type(s))
-            print(dir(s))
-            print(s.keys())
-            print(s.values())
             services.append(ServiceSchema(**s))
         print(services)
         return services
@@ -41,4 +36,3 @@ async def transactions_list():
     except Exception as err:
         print(err)
         return list()
-
