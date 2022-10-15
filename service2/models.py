@@ -54,7 +54,7 @@ class User:
     @classmethod
     async def get_service(cls, service_id):
         query = services.select().where(services.c.id == service_id)
-        service = await db.execute(query)
+        service = await db.fetch_one(query)
         return service
 
     @classmethod
