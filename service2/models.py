@@ -55,11 +55,15 @@ class User:
 
     @classmethod
     async def get_service(cls, uid):
-        query = user.select().where(users.c.id == uid)
+        query = users.select().where(users.c.id == uid)
         user = await db.fetch_one(query)
-        if user:
-            return user.service_id
-        return None
+        return user.service_id
+
+    @classmethod
+    async def get_all(cls):
+        query = users.select()
+        users_list = await db.fetch_all(query)
+        return users_list
 
 class Service:
     @classmethod
@@ -69,6 +73,18 @@ class Service:
         if service:
             return id
         return None
+
+    @classmethod
+    async def get_address(cls, sid):
+        query = services.select().where(services.c.id == id)
+        service = await db.fetch_one(query)
+        return service.address
+
+    @classmethod
+    async def get_id_by_name(cls, service_name):
+        query = services.select().where(services.c.name == service_name)
+        service = await db.fetch_one(query)
+        return service.id
 
     @classmethod
     async def create(cls, service_name, service_url):
@@ -85,6 +101,12 @@ class Service:
         query = services.select()
         services_list = await db.fetch_all(query)
         return services_list
+
+    @classmethod
+    async def get_first_service_id(cls):
+        query = services.select()
+        service = await db.fetch_one(query)
+        return service.id
 
 class Transaction:
     @classmethod

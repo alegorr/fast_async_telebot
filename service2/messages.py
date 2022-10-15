@@ -20,7 +20,7 @@ Available processors:
 
 BOT_SERVICE_MESSAGE = \
 '''
-You choose %s
+You choose {}
 '''
 
 BOT_TRY_AGAIN_MESSAGE = \

@@ -1,6 +1,18 @@
 version: "3"
 
 services:
+  nginx-proxy:
+    image: nginx
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./web:/etc/nginx/conf.d
+      - ./cert/ztest.online/cert1.pem:/root/ssl/cert.pem
+      - ./cert/ztest.online/privkey1.pem:/root/ssl/key.pem
+      - ./cert/dhparam.pem:/etc/nginx/dhparam/dhparam.pem
   db:
     image: postgres:11
     ports:
@@ -12,14 +24,15 @@ services:
   web:
     env_file: [.env]
     build: .
-    command: bash -c "alembic upgrade head && uvicorn service2.main:app --host 0.0.0.0 --port 8000 --reload"
+    command: bash -c "alembic upgrade head && gunicorn service2.main:app -k uvicorn.workers.UvicornWorker -w 2 -b 0.0.0.0:8000 --reload"
     volumes:
       - .:/code
+      - ./cert/ztest.online/cert1.pem:/root/ssl/cert.pem
+      - ./cert/ztest.online/privkey1.pem:/root/ssl/key.pem
     ports:
       - "8000:8000"
     depends_on:
       - db
-
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4
@@ -30,3 +43,7 @@ services:
       - "5050:80"
     depends_on:
       - db
+networks:
+  default:
+    external:
+      name: nginx-proxy
