@@ -124,7 +124,7 @@ async def set_user_service(message, service_name):
     if user and service:
         try:
             await User.set_service(user.id, service.id)
-            print("service {} succesfully seted to user {}".format(service.name, user.name))
+            print("service {} succesfully seted to user {}".format(service.name, user.username))
             await bot.reply_to(message, text=BOT_SERVICE_MESSAGE.format(service_name))
         except Exception as err:
             print("can not set user service ", err)
