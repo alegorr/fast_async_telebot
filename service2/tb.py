@@ -89,9 +89,12 @@ async def get_user(message):
                 "username": u.username,
                 "service_id": first_service.id
             }
-            uid = await User.create(**user_data)
-            user = await User.get(uid)
-            print("user {} successfully registered.".format(user.username))
+            await User.create(**user_data)
+            user = await User.get(u.id)
+            if user:
+                print("user {} successfully registered.".format(user.username))
+            else:
+                print("something went wrong")
     except Exception as err:
         print("get user error ", err)
     return user
