@@ -15,8 +15,8 @@ sudo docker-compose run web alembic upgrade head`
 `rm -rf alembic/versions`
 
 # Check service and test api
-http://localhost:8000/
-http://localhost:8000/docs
+https://ztest.online
+https://ztest.online/docs
 
 # Environment
 TELEBOT_NAME=@DP1Testbot
