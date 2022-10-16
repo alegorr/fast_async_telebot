@@ -2,6 +2,7 @@ from .app import app
 from fastapi import Request
 from .tb import TELEBOT_API_TOKEN, pull_messages
 from .api import services_list, users_list, transactions_list
+from .api import transactions_clear, users_clear, data_clear
 
 #############
 # API methods
@@ -27,6 +28,18 @@ async def get_all():
     users = await users_list()
     transactions = await transactions_list()
     return [services, users, transactions]
+
+@app.get("/transactions/clear/")
+async def clear_transactions():
+    await transactions_clear()
+
+@app.get("/users/clear/")
+async def clear_users():
+    await users_clear()
+
+@app.get("/clear/")
+async def clear():
+    await data_clear()
 
 ##############
 # Webhook cast

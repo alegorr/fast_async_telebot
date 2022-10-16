@@ -63,6 +63,11 @@ class User:
         users_list = await db.fetch_all(query)
         return users_list
 
+    @classmethod
+    async def delete_all(cls):
+        query = users.delete()
+        await db.execute(query)
+
 class Service:
     @classmethod
     async def get(cls, service_name):
@@ -92,6 +97,11 @@ class Service:
         services_list = await db.fetch_all(query)
         return services_list
 
+    @classmethod
+    async def delete_all(cls):
+        query = services.delete()
+        await db.execute(query)
+
 class Transaction:
     @classmethod
     async def get(cls, id):
@@ -115,3 +125,8 @@ class Transaction:
         query = transactions.select()
         transactions_list = await db.fetch_all(query)
         return transactions_list
+
+    @classmethod
+    async def delete_all(cls):
+        query = transacitons.delete()
+        await db.execute(query)
