@@ -23,12 +23,17 @@ rm -rf alembic/versions
 ```
 
 # Check service and test api
+<<<<<<< HEAD
 + *localhost*
   - http://localhost:8000/
   - http://localhost:8000/docs
 + *battle server*
   - https://ztest.online/
   - https://ztest.online/docs
+=======
+https://ztest.online
+https://ztest.online/docs
+>>>>>>> ac631b7af30266e1894b1c77c42f12505bdcdb04
 
 # Environment
 ``` bash
