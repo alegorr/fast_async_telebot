@@ -29,17 +29,10 @@ async def get_all():
     transactions = await transactions_list()
     return [services, users, transactions]
 
-@app.get("/transactions/clear/")
-async def clear_transactions():
-    await transactions_clear()
-
-@app.get("/users/clear/")
-async def clear_users():
-    await users_clear()
-
 @app.get("/clear/")
 async def clear():
-    await data_clear()
+    result = await data_clear()
+    return "Clear {}".format(result)
 
 ##############
 # Webhook cast

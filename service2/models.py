@@ -128,5 +128,5 @@ class Transaction:
 
     @classmethod
     async def delete_all(cls):
-        query = transacitons.delete()
+        query = transactions.delete()
         await db.execute(query)

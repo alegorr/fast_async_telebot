@@ -37,22 +37,6 @@ async def transactions_list():
         print(err)
         return list()
 
-async def transactions_clear():
-    try:
-        await Transaction.delete_all()
-        return "Ok!"
-    except Exception as err:
-        print(err)
-        return "Fail"
-
-async def users_clear():
-    try:
-        await User.delete_all()
-        return "Ok!"
-    except Exception as err:
-        print(err)
-        return "Fail"
-
 async def data_clear():
     try:
         await Transaction.delete_all()
@@ -60,4 +44,4 @@ async def data_clear():
         return "Ok!"
     except Exception as err:
         print(err)
-        return "Fail"
+        return "Error"
