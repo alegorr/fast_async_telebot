@@ -1,8 +1,7 @@
 from .app import app
 from fastapi import Request
 from .tb import TELEBOT_API_TOKEN, pull_messages
-from .api import services_list, users_list, transactions_list
-from .api import transactions_clear, users_clear, data_clear
+from .api import services_list, users_list, transactions_list, data_clear
 
 #############
 # API methods
