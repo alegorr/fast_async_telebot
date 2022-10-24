@@ -23,7 +23,7 @@ services:
   web:
     env_file: [.env]
     build: .
-    command: bash -c "alembic upgrade head && gunicorn service2.main:app -k uvicorn.workers.UvicornWorker -w 2 -b 0.0.0.0:8000 --reload"
+    command: bash -c "alembic upgrade head && gunicorn service2.main:app -k uvicorn.workers.UvicornWorker -w 2 -b 0.0.0.0:8000"
     volumes:
       - .:/code
       - ./deploy/ztest.online/cert/cert1.pem:/root/ssl/cert.pem
